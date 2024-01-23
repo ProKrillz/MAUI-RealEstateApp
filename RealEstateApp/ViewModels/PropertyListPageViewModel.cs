@@ -37,9 +37,6 @@ public class PropertyListPageViewModel : BaseViewModel
         },
         canExecute: () => Geolocation.GetLastKnownLocationAsync() != null
         );
-  
-
-
 
     private Command getPropertiesCommand;
     public ICommand GetPropertiesCommand => getPropertiesCommand ??= new Command(async () => await GetPropertiesAsync());
