@@ -72,13 +72,28 @@ public class AddEditPropertyPageViewModel : BaseViewModel
         
     private async Task GetLocationFromAddress()
     {
-        IEnumerable<Location> locations = await Geocoding.GetLocationsAsync(Property.Address);
-        if (locations is not null)
+        if (!string.IsNullOrWhiteSpace(Property.Address))
         {
-            Location location = locations?.FirstOrDefault();
-            Property.Latitude = location?.Latitude;
-            Property.Longitude = location?.Longitude;
-            OnPropertyChanged(nameof(Property));
+            try
+            {
+                if (string.IsNullOrWhiteSpace(Property.Address))
+                {
+                    await Shell.Current.DisplayAlert("Error!", "Please enter an address", "ok");
+                }
+                else
+                {
+                    Location location = (await Geocoding.GetLocationsAsync(Property.Address)).FirstOrDefault();
+                    Property.Latitude = location.Latitude;
+                    Property.Longitude = location.Longitude;
+                    OnPropertyChanged(nameof(Property));
+                }
+
+            }
+            catch (Exception x)
+            {
+                await Shell.Current.DisplayAlert("Error!", "An error wasn't handle properly", "ok");
+
+            }
         }
     }
 
