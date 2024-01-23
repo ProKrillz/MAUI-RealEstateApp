@@ -33,6 +33,45 @@
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
+
+                    <Label FontSize="Medium">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span FontFamily="MaterialRegular" Text="{StaticResource IconNear_me}" />
+                                <Span Text=" " />
+                                <Span Text="Location*" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Grid ColumnDefinitions="*,*,*">
+                        <Label
+                            Grid.Column="0"
+                            HorizontalOptions="Center"
+                            Text="{Binding Property.Latitude, Converter={converters:DoubleStringConverter}}"
+                            TextColor="Black"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Column="1"
+                            HorizontalOptions="Center"
+                            Text="{Binding Property.Longitude, Converter={converters:DoubleStringConverter}}"
+                            TextColor="Black"
+                            VerticalOptions="Center" />
+                        <Button
+                            Grid.Column="2"
+                            Command="{Binding GetCurrentLocation}"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            WidthRequest="100">
+                            <Button.ImageSource>
+                                <FontImageSource
+                                    FontFamily="MaterialRegular"
+                                    Glyph="{StaticResource IconLocation_on}"
+                                    Size="25" />
+                            </Button.ImageSource>
+                        </Button>
+                    </Grid>
+
                     <Entry FontSize="Medium" Text="{Binding Property.Address}" />
 
                     <Label FontFamily="FA-solid" FontSize="Medium">

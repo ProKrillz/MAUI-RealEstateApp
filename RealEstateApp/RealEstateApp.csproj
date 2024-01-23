@@ -61,10 +61,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Converters\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <MauiAsset Include="Helpers\IconFont.cs" />
 	</ItemGroup>
 
@@ -79,6 +75,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Resources\Styles\FontIcons.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\AboutPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
