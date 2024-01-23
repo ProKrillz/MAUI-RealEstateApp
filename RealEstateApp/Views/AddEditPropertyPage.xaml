@@ -33,18 +33,26 @@
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
-
+                    <Entry
+                        FontSize="Medium"
+                        Text="{Binding Property.Address}"
+                        TextColor="Black" />
+                    
                     <Label FontSize="Medium">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span FontFamily="MaterialRegular" Text="{StaticResource IconNear_me}" />
+                                <Span FontFamily="MaterialRegular" Text="{StaticResource IconNear_me}">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding GetAddressFromLocationCommand}" />
+                                    </Span.GestureRecognizers>
+                                </Span>
                                 <Span Text=" " />
                                 <Span Text="Location*" />
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
 
-                    <Grid ColumnDefinitions="*,*,*">
+                    <Grid ColumnDefinitions="*,*,auto,auto" ColumnSpacing="10">
                         <Label
                             Grid.Column="0"
                             HorizontalOptions="Center"
@@ -62,7 +70,7 @@
                             Command="{Binding GetCurrentLocation}"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
-                            WidthRequest="100">
+                            WidthRequest="50">
                             <Button.ImageSource>
                                 <FontImageSource
                                     FontFamily="MaterialRegular"
@@ -70,9 +78,20 @@
                                     Size="25" />
                             </Button.ImageSource>
                         </Button>
+                        <Button
+                            Grid.Column="3"
+                            Command="{Binding GetLocationFromAddressCommand}"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            WidthRequest="50">
+                            <Button.ImageSource>
+                                <FontImageSource
+                                    FontFamily="MaterialRegular"
+                                    Glyph="{StaticResource IconHome}"
+                                    Size="25" />
+                            </Button.ImageSource>
+                        </Button>
                     </Grid>
-
-                    <Entry FontSize="Medium" Text="{Binding Property.Address}" />
 
                     <Label FontFamily="FA-solid" FontSize="Medium">
                         <Label.FormattedText>

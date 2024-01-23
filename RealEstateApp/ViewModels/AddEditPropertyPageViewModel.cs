@@ -67,6 +67,30 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     }
     #endregion
 
+    private Command _getLocationFromAddressCommand;
+    public ICommand GetLocationFromAddressCommand => _getLocationFromAddressCommand ??= new Command(async () => await GetLocationFromAddress()); 
+        
+    private async Task GetLocationFromAddress()
+    {
+        IEnumerable<Location> locations = await Geocoding.GetLocationsAsync(Property.Address);
+        if (locations is not null)
+        {
+            Location location = locations?.FirstOrDefault();
+            Property.Latitude = location?.Latitude;
+            Property.Longitude = location?.Longitude;
+            OnPropertyChanged(nameof(Property));
+        }
+    }
+
+    private Command _getAddressFromLocationCommand;
+    public ICommand GetAddressFromLocationCommand => _getAddressFromLocationCommand ??= new Command(
+        execute: async () =>
+        {
+            IEnumerable<Placemark> placemarks = await Geocoding.GetPlacemarksAsync(Property.Latitude.Value, Property.Longitude.Value);
+            Property.Address = placemarks.FirstOrDefault().ToString();
+            OnPropertyChanged(nameof(Property));
+        },
+        canExecute: () => Property.Latitude.HasValue && Property.Longitude.HasValue);  
 
     private Command savePropertyCommand;
     public ICommand SavePropertyCommand => savePropertyCommand ??= new Command(async () => await SaveProperty());
@@ -97,8 +121,8 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     private Command cancelSaveCommand;
     public ICommand CancelSaveCommand => cancelSaveCommand ??= new Command(async () => await Shell.Current.GoToAsync(".."));
 
-    private Command _getCurrentLocation;
 
+    private Command _getCurrentLocation;
     public ICommand GetCurrentLocation => _getCurrentLocation ??= new Command(
         execute: async () => {
             try
@@ -127,6 +151,5 @@ public class AddEditPropertyPageViewModel : BaseViewModel
             {
                 // Unable to get location
             }
-
         });
 }
