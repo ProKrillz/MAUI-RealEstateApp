@@ -35,9 +35,15 @@ public class PropertyDetailPageViewModel : BaseViewModel
     }
 
     private Command editPropertyCommand;
-    public ICommand EditPropertyCommand => editPropertyCommand ??= new Command(async () => await GotoEditProperty());
-    async Task GotoEditProperty()
+    public ICommand EditPropertyCommand => editPropertyCommand ??= new Command(async () =>
     {
-        
-    }
+        if (propertyListItem == null)
+            return;
+
+        await Shell.Current.GoToAsync(nameof(AddEditPropertyPage), true, new Dictionary<string, object>
+        {
+            {"MyProperty", Property }
+        });
+    });
+ 
 }

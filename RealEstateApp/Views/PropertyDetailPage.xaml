@@ -9,7 +9,9 @@
     x:DataType="vm:PropertyDetailPageViewModel">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding EditPropertyCommand}" Text="Edit" />
+        <ToolbarItem
+            Command="{Binding EditPropertyCommand}"
+            Text="Edit" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
