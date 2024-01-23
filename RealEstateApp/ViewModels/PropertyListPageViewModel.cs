@@ -1,4 +1,5 @@
-﻿using RealEstateApp.Models;
+﻿using Microsoft.Maui.Devices.Sensors;
+using RealEstateApp.Models;
 using RealEstateApp.Services;
 using RealEstateApp.Views;
 using System.Collections.ObjectModel;
@@ -25,6 +26,21 @@ public class PropertyListPageViewModel : BaseViewModel
         set => SetProperty(ref isRefreshing, value);
     }
 
+    private Command _sortCommand;
+    public ICommand SortCommand => _sortCommand ??= new Command(
+        execute: () =>
+        {
+            List<PropertyListItem> list = PropertiesCollection.ToList();
+            PropertiesCollection.Clear();
+            foreach (var item in list.OrderBy(x => x.Distance))
+                PropertiesCollection.Add(item);
+        },
+        canExecute: () => Geolocation.GetLastKnownLocationAsync() != null
+        );
+  
+
+
+
     private Command getPropertiesCommand;
     public ICommand GetPropertiesCommand => getPropertiesCommand ??= new Command(async () => await GetPropertiesAsync());
 
@@ -41,8 +57,11 @@ public class PropertyListPageViewModel : BaseViewModel
             if (PropertiesCollection.Count != 0)
                 PropertiesCollection.Clear();
 
+            Location location = await Geolocation.GetLocationAsync();
             foreach (Property property in properties)
-                PropertiesCollection.Add(new PropertyListItem(property));
+            {
+                PropertiesCollection.Add(new PropertyListItem(property, Location.CalculateDistance(property.Latitude.Value, property.Longitude.Value, location, DistanceUnits.Kilometers)));
+            }
 
         }
         catch (Exception ex)

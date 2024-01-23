@@ -4,9 +4,10 @@ using System.Runtime.CompilerServices;
 namespace RealEstateApp.Models;
 public class PropertyListItem : INotifyPropertyChanged
 {
-    public PropertyListItem(Property property)
+    public PropertyListItem(Property property, double distance)
     {
         Property = property;
+        Distance = distance;
     }
 
     private Property _property;
@@ -18,6 +19,17 @@ public class PropertyListItem : INotifyPropertyChanged
         {
             _property = value;
             OnPropertyChanged();
+        }
+    }
+
+    private double _distance;
+    public double Distance
+    {
+        get => _distance;
+        set 
+        {
+            _distance = value;
+            OnPropertyChanged(); 
         }
     }
 

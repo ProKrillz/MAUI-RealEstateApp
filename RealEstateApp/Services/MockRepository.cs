@@ -48,6 +48,7 @@ namespace RealEstateApp.Repositories
                     Beds = 3, Baths = 1, Parking = 1, LandSize = 500, Price = 600000, AgentId = "agent_2",
                     ImageUrls = GetPropertyImageUrls(1),
                     Latitude = -33.739499, Longitude = 151.300683
+                    
                 },
                 new Property
                 {
