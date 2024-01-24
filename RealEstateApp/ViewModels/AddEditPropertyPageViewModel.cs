@@ -122,7 +122,8 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     {
         if (IsValid() == false)
         {
-           StatusMessage = "Please fill in all required fields";
+            Vibration.Vibrate(5000);
+            StatusMessage = "Please fill in all required fields";
             StatusColor = Colors.Red;
         }
         else
@@ -143,7 +144,12 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     }
 
     private Command cancelSaveCommand;
-    public ICommand CancelSaveCommand => cancelSaveCommand ??= new Command(async () => await Shell.Current.GoToAsync(".."));
+    public ICommand CancelSaveCommand => cancelSaveCommand ??= new Command(
+        execute: async () => 
+        {
+            Vibration.Cancel();
+            await Shell.Current.GoToAsync("..");
+        });
 
 
     private Command _getCurrentLocation;

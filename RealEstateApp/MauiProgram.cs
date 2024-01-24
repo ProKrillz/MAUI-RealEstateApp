@@ -19,10 +19,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("fa-solid-900.ttf", "FA-solid");
                 fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialRegular");
-            }).ConfigureEssentials(essentials =>
-            {
-                essentials.UseMapServiceToken("YOUR-API-TOKEN");
-            }); ;
+            });
 
         builder.Services.AddSingleton<IPropertyService, MockRepository>();
         builder.Services.AddSingleton<PropertyListPage>();
