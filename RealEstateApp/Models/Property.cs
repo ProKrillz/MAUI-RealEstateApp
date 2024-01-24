@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+
 namespace RealEstateApp.Models
 {
-    public class Property
+    public class Property : BaseModel
     {
         public Property()
         {
@@ -24,7 +25,8 @@ namespace RealEstateApp.Models
         public List<string> ImageUrls { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
-        public string Aspect { get; set; }
+        private string _aspect;
+        public string Aspect { get => _aspect; set => SetProperty(ref _aspect, value); }
 
         public string MainImageUrl => ImageUrls?.FirstOrDefault() ?? GlobalSettings.Instance.NoImageUrl;
     }

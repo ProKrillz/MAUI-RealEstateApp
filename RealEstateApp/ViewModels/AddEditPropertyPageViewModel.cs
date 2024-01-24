@@ -297,9 +297,6 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     public ICommand GoToCompassPageCommand => _goToCompassPageCommand ??= new Command(
         execute: async () =>
         {
-            if (string.IsNullOrWhiteSpace(Property.Aspect))
-                return;
-
             await Shell.Current.GoToAsync(nameof(CompassPage), true, new Dictionary<string, object>
             {
                 {"MyProperty", Property }

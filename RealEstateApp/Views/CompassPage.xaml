@@ -4,7 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:fa="clr-namespace:FontAwesome"
-    Title="CompassPage">
+    Title="CompassPage"
+    Shell.PresentationMode="ModalAnimated">
     <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto">
 
         <Label
