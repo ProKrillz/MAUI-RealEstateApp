@@ -13,5 +13,10 @@
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<!--Vibrate-->
 	<uses-permission android:name="android.permission.VIBRATE" />
+	<!--Batteri-->
+	<uses-permission android:name="android.permission.BATTERY_STATS" />
+	<!--FlashLight-->
+	<uses-permission android:name="android.permission.FLASHLIGHT" />
+	<uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

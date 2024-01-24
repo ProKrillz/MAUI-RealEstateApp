@@ -13,6 +13,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding CancelSaveCommand}" Text="Cancel" />
         <ToolbarItem Command="{Binding SavePropertyCommand}" Text="Save" />
+        <ToolbarItem Command="{Binding FlashlightSwitchCommand}" Text="light" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -21,6 +22,10 @@
                 BackgroundColor="{Binding StatusColor}"
                 IsVisible="{Binding StatusMessage, Converter={converters:StringBoolConverter}}"
                 Text="{Binding StatusMessage}" />
+            <Label
+                BackgroundColor="{Binding StatusBatteryColor}"
+                IsVisible="{Binding BatteryStateLabel, Converter={converters:StringBoolConverter}}"
+                Text="{Binding BatteryStateLabel}" />
             <ScrollView VerticalOptions="FillAndExpand">
                 <StackLayout Padding="15" Spacing="20">
 

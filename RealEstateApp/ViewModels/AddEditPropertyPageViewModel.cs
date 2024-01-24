@@ -67,6 +67,100 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     }
     #endregion
 
+    Color _statusBatteryColor;
+    public Color StatusBatteryColor
+    {
+        get { return _statusBatteryColor; }
+        set { SetProperty(ref _statusBatteryColor, value); }
+    }
+    private string _batteryStateLabel;
+    public string BatteryStateLabel
+    {
+        get { return _batteryStateLabel; }
+        set { SetProperty(ref _batteryStateLabel, value); }
+    }
+    private bool _flashlightSwitch = true;
+
+    public bool FlashlightSwitch
+    {
+        get { return _flashlightSwitch; }
+        set { SetProperty(ref _flashlightSwitch, value); }
+    }
+
+    private bool _isBatteryWatched;
+
+    private Command _watchBatteryCommand;
+
+    public ICommand WatchBatteryCommand => _watchBatteryCommand ?? new Command(
+        execute: () => 
+        {
+            if (!_isBatteryWatched)
+            {
+                Battery.Default.BatteryInfoChanged += Battery_BatteryInfoChanged;
+            }
+            else
+            {
+                Battery.Default.BatteryInfoChanged -= Battery_BatteryInfoChanged;
+            }
+            _isBatteryWatched = !_isBatteryWatched;
+        });
+
+    private void Battery_BatteryInfoChanged(object sender, BatteryInfoChangedEventArgs e)
+    {
+        if (Battery.EnergySaverStatus == EnergySaverStatus.On)
+        {
+            StatusBatteryColor = Colors.Green;
+            BatteryStateLabel = $"EnergySave is on";
+            return;
+        }
+        if (e.State == BatteryState.Charging)
+        {
+            StatusBatteryColor = Colors.Yellow;
+            BatteryStateLabel = $"Battery is {e.ChargeLevel * 100}% charged.";
+            return;
+        }
+        if (e.ChargeLevel * 100 <= 20)
+        {
+            StatusBatteryColor = Colors.Red;
+            BatteryStateLabel = $"Battery is under 20%: {e.ChargeLevel * 100}% charged.";
+            return;
+        }
+        else
+        {
+            StatusBatteryColor = null;
+            BatteryStateLabel = string.Empty;
+        }
+    }
+    private Command _flashlightSwitchCommand;
+    public ICommand FlashlightSwitchCommand => _flashlightSwitchCommand ??= new Command(
+        execute: async () => {
+            try
+            {
+                if (FlashlightSwitch)
+                {
+                    await Flashlight.TurnOnAsync();
+                    FlashlightSwitch = false;
+                }
+                else
+                {
+                    await Flashlight.TurnOffAsync();
+                    FlashlightSwitch = true;
+                }
+            }
+            catch (FeatureNotSupportedException ex)
+            {
+                // Handle not supported on device exception
+            }
+            catch (PermissionException ex)
+            {
+                // Handle permission exception
+            }
+            catch (Exception ex)
+            {
+                // Unable to turn on/off flashlight
+            }
+        });
+
     private Command _checkInternet;
     public ICommand CheckInternet => _checkInternet ??= new Command(
         execute: async () => {

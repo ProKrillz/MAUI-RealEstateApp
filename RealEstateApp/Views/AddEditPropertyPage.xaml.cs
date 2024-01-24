@@ -14,5 +14,7 @@ public partial class AddEditPropertyPage : ContentPage
     protected override void OnAppearing()
 	{
 		vm.CheckInternet.Execute(null);
-	}
+		vm.WatchBatteryCommand.Execute(null);
+
+    }
 }
