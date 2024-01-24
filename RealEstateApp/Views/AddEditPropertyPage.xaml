@@ -99,6 +99,46 @@
                         </Button>
                     </Grid>
 
+
+                    <Label FontSize="Medium">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span FontFamily="MaterialRegular" Text="{StaticResource IconCompass_calibration}">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding GetAddressFromLocationCommand}" />
+                                    </Span.GestureRecognizers>
+                                </Span>
+                                <Span Text=" " />
+                                <Span Text="Aspect*" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Grid ColumnDefinitions="*,auto" ColumnSpacing="10">
+                        <Entry
+                            Grid.Column="0"
+                            HorizontalOptions="Start"
+                            Text="{Binding Property.Aspect}"
+                            TextColor="Black"
+                            VerticalOptions="Start"
+                            WidthRequest="300" />
+
+                        <Button
+                            Grid.Column="2"
+                            Command="{Binding GoToCompassPageCommand}"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            WidthRequest="50">
+                            <Button.ImageSource>
+                                <FontImageSource
+                                    FontFamily="MaterialRegular"
+                                    Glyph="{StaticResource IconCompass_calibration}"
+                                    Size="25" />
+                            </Button.ImageSource>
+                        </Button>
+
+                    </Grid>
+
                     <Label FontFamily="FA-solid" FontSize="Medium">
                         <Label.FormattedText>
                             <FormattedString>

@@ -1,5 +1,6 @@
 ﻿using RealEstateApp.Models;
 using RealEstateApp.Services;
+using RealEstateApp.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -65,8 +66,6 @@ public class AddEditPropertyPageViewModel : BaseViewModel
         get { return statusColor; }
         set { SetProperty(ref statusColor, value); }
     }
-    #endregion
-
     Color _statusBatteryColor;
     public Color StatusBatteryColor
     {
@@ -79,18 +78,20 @@ public class AddEditPropertyPageViewModel : BaseViewModel
         get { return _batteryStateLabel; }
         set { SetProperty(ref _batteryStateLabel, value); }
     }
-    private bool _flashlightSwitch = true;
 
+    private bool _flashlightSwitch = true;
     public bool FlashlightSwitch
     {
         get { return _flashlightSwitch; }
         set { SetProperty(ref _flashlightSwitch, value); }
     }
+    #endregion
+
+    #region Battery
 
     private bool _isBatteryWatched;
 
     private Command _watchBatteryCommand;
-
     public ICommand WatchBatteryCommand => _watchBatteryCommand ?? new Command(
         execute: () => 
         {
@@ -131,6 +132,11 @@ public class AddEditPropertyPageViewModel : BaseViewModel
             BatteryStateLabel = string.Empty;
         }
     }
+
+    #endregion
+
+    #region Flash
+
     private Command _flashlightSwitchCommand;
     public ICommand FlashlightSwitchCommand => _flashlightSwitchCommand ??= new Command(
         execute: async () => {
@@ -161,6 +167,8 @@ public class AddEditPropertyPageViewModel : BaseViewModel
             }
         });
 
+    #endregion
+
     private Command _checkInternet;
     public ICommand CheckInternet => _checkInternet ??= new Command(
         execute: async () => {
@@ -169,6 +177,9 @@ public class AddEditPropertyPageViewModel : BaseViewModel
                 await Shell.Current.DisplayAlert("Error!", "No internet", "ok");
             }
         });
+
+    #region Location
+
 
     private Command _getLocationFromAddressCommand;
     public ICommand GetLocationFromAddressCommand => _getLocationFromAddressCommand ??= new Command(
@@ -208,7 +219,42 @@ public class AddEditPropertyPageViewModel : BaseViewModel
             Property.Address = placemarks.FirstOrDefault().ToString();
             OnPropertyChanged(nameof(Property));
         },
-        canExecute: () => Property.Latitude.HasValue && Property.Longitude.HasValue);  
+        canExecute: () => Property.Latitude.HasValue && Property.Longitude.HasValue);
+
+
+    private Command _getCurrentLocation;
+    public ICommand GetCurrentLocation => _getCurrentLocation ??= new Command(
+        execute: async () => {
+            try
+            {
+                Location location = await Geolocation.Default.GetLocationAsync();
+                if (location is not null)
+                {
+                    Property.Latitude = location.Latitude;
+                    Property.Longitude = location.Longitude;
+                    OnPropertyChanged(nameof(Property));
+                }
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                // Handle not supported on device exception
+            }
+            catch (FeatureNotEnabledException fneEx)
+            {
+                // Handle not enabled on device exception
+            }
+            catch (PermissionException pEx)
+            {
+                // Handle permission exception
+            }
+            catch (Exception ex)
+            {
+                // Unable to get location
+            }
+        },
+        canExecute: () => Connectivity.Current.NetworkAccess == NetworkAccess.Internet);
+
+    #endregion
 
     private Command savePropertyCommand;
     public ICommand SavePropertyCommand => savePropertyCommand ??= new Command(async () => await SaveProperty());
@@ -244,37 +290,22 @@ public class AddEditPropertyPageViewModel : BaseViewModel
             Vibration.Cancel();
             await Shell.Current.GoToAsync("..");
         });
+    #region Compass
 
+    private Command _goToCompassPageCommand;
 
-    private Command _getCurrentLocation;
-    public ICommand GetCurrentLocation => _getCurrentLocation ??= new Command(
-        execute: async () => {
-            try
+    public ICommand GoToCompassPageCommand => _goToCompassPageCommand ??= new Command(
+        execute: async () =>
+        {
+            if (string.IsNullOrWhiteSpace(Property.Aspect))
+                return;
+
+            await Shell.Current.GoToAsync(nameof(CompassPage), true, new Dictionary<string, object>
             {
-                Location location = await Geolocation.Default.GetLocationAsync();
-                if (location is not null)
-                {
-                    Property.Latitude = location.Latitude;
-                    Property.Longitude = location.Longitude;
-                    OnPropertyChanged(nameof(Property));
-                }
-            }
-            catch (FeatureNotSupportedException fnsEx)
-            {
-                // Handle not supported on device exception
-            }
-            catch (FeatureNotEnabledException fneEx)
-            {
-                // Handle not enabled on device exception
-            }
-            catch (PermissionException pEx)
-            {
-                // Handle permission exception
-            }
-            catch (Exception ex)
-            {
-                // Unable to get location
-            }
-        },
-        canExecute: () => Connectivity.Current.NetworkAccess == NetworkAccess.Internet);
+                {"MyProperty", Property }
+            });
+        });
+
+    #endregion
+
 }
