@@ -14,7 +14,7 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     public AddEditPropertyPageViewModel(IPropertyService service)
     {
         this.service = service;
-        Agents = new ObservableCollection<Agent>(service.GetAgents());
+        Agents = new ObservableCollection<Agent>(service.GetAgents());  
     }
 
     public string Mode { get; set; }
@@ -67,35 +67,44 @@ public class AddEditPropertyPageViewModel : BaseViewModel
     }
     #endregion
 
+    private Command _checkInternet;
+    public ICommand CheckInternet => _checkInternet ??= new Command(
+        execute: async () => {
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                await Shell.Current.DisplayAlert("Error!", "No internet", "ok");
+            }
+        });
+
     private Command _getLocationFromAddressCommand;
-    public ICommand GetLocationFromAddressCommand => _getLocationFromAddressCommand ??= new Command(async () => await GetLocationFromAddress()); 
-        
-    private async Task GetLocationFromAddress()
-    {
-        if (!string.IsNullOrWhiteSpace(Property.Address))
+    public ICommand GetLocationFromAddressCommand => _getLocationFromAddressCommand ??= new Command(
+        execute: async () =>
         {
-            try
+            if (!string.IsNullOrWhiteSpace(Property.Address))
             {
-                if (string.IsNullOrWhiteSpace(Property.Address))
+                try
                 {
-                    await Shell.Current.DisplayAlert("Error!", "Please enter an address", "ok");
+                    if (string.IsNullOrWhiteSpace(Property.Address))
+                    {
+                        await Shell.Current.DisplayAlert("Error!", "Please enter an address", "ok");
+                    }
+                    else
+                    {
+                        Location location = (await Geocoding.GetLocationsAsync(Property.Address)).FirstOrDefault();
+                        Property.Latitude = location.Latitude;
+                        Property.Longitude = location.Longitude;
+                        OnPropertyChanged(nameof(Property));
+                    }
+
                 }
-                else
+                catch (Exception x)
                 {
-                    Location location = (await Geocoding.GetLocationsAsync(Property.Address)).FirstOrDefault();
-                    Property.Latitude = location.Latitude;
-                    Property.Longitude = location.Longitude;
-                    OnPropertyChanged(nameof(Property));
+                    await Shell.Current.DisplayAlert("Error!", "An error wasn't handle properly", "ok");
                 }
-
             }
-            catch (Exception x)
-            {
-                await Shell.Current.DisplayAlert("Error!", "An error wasn't handle properly", "ok");
-
-            }
-        }
-    }
+        },
+        canExecute: () => Connectivity.Current.NetworkAccess == NetworkAccess.Internet); 
+        
 
     private Command _getAddressFromLocationCommand;
     public ICommand GetAddressFromLocationCommand => _getAddressFromLocationCommand ??= new Command(
@@ -166,5 +175,6 @@ public class AddEditPropertyPageViewModel : BaseViewModel
             {
                 // Unable to get location
             }
-        });
+        },
+        canExecute: () => Connectivity.Current.NetworkAccess == NetworkAccess.Internet);
 }
