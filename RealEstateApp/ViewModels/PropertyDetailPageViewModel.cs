@@ -12,6 +12,14 @@ public class PropertyDetailPageViewModel : BaseViewModel
     public PropertyDetailPageViewModel(IPropertyService service)
     {
         this.service = service;
+        IsVisible = true;
+    }
+
+    private bool _isVisible;
+    public bool IsVisible
+    {
+        get { return _isVisible; }
+        set { SetProperty(ref _isVisible, value); }
     }
 
     Property property;
@@ -33,6 +41,26 @@ public class PropertyDetailPageViewModel : BaseViewModel
             Agent = service.GetAgents().FirstOrDefault(x => x.Id == Property.AgentId);
         }
     }
+    private CancellationTokenSource cts;
+
+    private Command _startSpeck;
+    public ICommand StartSpeck => _startSpeck ??= new Command(
+        execute: async () => {
+            IsVisible = false;
+            cts = new CancellationTokenSource();
+            await TextToSpeech.Default.SpeakAsync(Property.Description, cancelToken: cts.Token);
+            IsVisible = true;
+        });
+
+    private Command _stopSpeck;
+    public ICommand StopSpeck => _stopSpeck ??= new Command(
+        execute: () => 
+        {
+            if (cts?.IsCancellationRequested ?? true)
+                return;
+            IsVisible = true;
+            cts.Cancel();
+        });
 
     private Command editPropertyCommand;
     public ICommand EditPropertyCommand => editPropertyCommand ??= new Command(async () =>

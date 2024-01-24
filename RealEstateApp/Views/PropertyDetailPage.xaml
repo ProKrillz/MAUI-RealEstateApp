@@ -3,21 +3,20 @@
     x:Class="RealEstateApp.Views.PropertyDetailPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:RealEstateApp.Converters"
     xmlns:fa="clr-namespace:FontAwesome"
     xmlns:vm="clr-namespace:RealEstateApp.ViewModels"
     Title="{Binding Property.Address}"
     x:DataType="vm:PropertyDetailPageViewModel">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Command="{Binding EditPropertyCommand}"
-            Text="Edit" />
+        <ToolbarItem Command="{Binding EditPropertyCommand}" Text="Edit" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
         <Grid
             Padding="15"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             RowSpacing="10">
             <Image
                 Grid.Row="0"
@@ -75,23 +74,50 @@
                 Grid.Row="4"
                 FontSize="14"
                 Text="{Binding Property.LandSize, StringFormat='Land size: {0} &#x33a1;'}" />
-            <Label
+            <Button
                 Grid.Row="5"
+                Command="{Binding StartSpeck}"
+                HorizontalOptions="Start"
+                IsVisible="{Binding IsVisible}"
+                WidthRequest="50">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="MaterialRegular"
+                        Glyph="{StaticResource IconPlay_arrow}"
+                        Size="25" />
+                </Button.ImageSource>
+            </Button>
+            <Button
+                Grid.Row="5"
+                Command="{Binding StopSpeck}"
+                HorizontalOptions="Start"
+                IsVisible="{Binding IsVisible, Converter={converter:InverseBoolConverter}}"
+                WidthRequest="50">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="MaterialRegular"
+                        Glyph="{StaticResource IconPause}"
+                        Size="25" />
+                </Button.ImageSource>
+            </Button>
+
+            <Label
+                Grid.Row="6"
                 Margin="0,20,0,0"
                 FontAttributes="Bold"
                 FontSize="14"
                 Text="Description:" />
             <Label
-                Grid.Row="6"
+                Grid.Row="7"
                 Margin="0,0,0,20"
                 FontSize="14"
                 Text="{Binding Property.Description}" />
             <Label
-                Grid.Row="7"
+                Grid.Row="8"
                 FontAttributes="Bold"
                 FontSize="14"
                 Text="Listed by:" />
-            <Grid Grid.Row="8" ColumnDefinitions="auto, *">
+            <Grid Grid.Row="9" ColumnDefinitions="auto, *">
                 <Image
                     Grid.Column="0"
                     Source="{Binding Agent.ImageUrl}"
