@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="RealEstateApp.Views.ImageListPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:RealEstateApp.Models"
+    xmlns:vm="clr-namespace:RealEstateApp.ViewModels"
+    Title="{Binding Property.Address}"
+    x:DataType="vm:ImageListPageModelView">
+
+    <CarouselView ItemsSource="{Binding HouseImageCollection}" Position="{Binding Position}">
+        <CarouselView.ItemsLayout>
+            <LinearItemsLayout Orientation="Horizontal" />
+        </CarouselView.ItemsLayout>
+        <CarouselView.ItemTemplate>
+            <DataTemplate x:DataType="models:Property">
+
+                <Image Source="{Binding}" />
+            </DataTemplate>
+        </CarouselView.ItemTemplate>
+
+    </CarouselView>
+</ContentPage>

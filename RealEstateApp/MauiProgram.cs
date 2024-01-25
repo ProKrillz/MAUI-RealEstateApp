@@ -36,8 +36,9 @@ public static class MauiProgram
 
         builder.Services.AddTransient<HeightCalculatorPage>();
         builder.Services.AddTransient<HeightCalculatorPageViewModel>();
-        
 
+        builder.Services.AddTransient<ImageListPage>();
+        builder.Services.AddTransient<ImageListPageModelView>();
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
