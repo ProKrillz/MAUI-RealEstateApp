@@ -29,12 +29,52 @@
                 </Image.GestureRecognizers>
 
             </Image>
-            <Label
-                Grid.Row="1"
-                FontAttributes="Bold"
-                FontSize="16"
-                LineBreakMode="NoWrap"
-                Text="{Binding Property.Price, StringFormat='{0:C0}'}" />
+            <HorizontalStackLayout Grid.Row="1" Spacing="10">
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    LineBreakMode="NoWrap"
+                    Text="{Binding Property.Price, StringFormat='{0:C0}'}"
+                    VerticalOptions="Start" />
+
+                <Button
+                    Command="{Binding ShareTextAndLinkCommand}"
+                    VerticalOptions="End"
+                    WidthRequest="50">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialRegular"
+                            Glyph="{StaticResource IconShare}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+
+                <Button
+                    Command="{Binding ShareFileCommand}"
+                    VerticalOptions="End"
+                    WidthRequest="50">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialRegular"
+                            Glyph="{StaticResource IconFolder_shared}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+
+                <Button
+                    Command="{Binding ShareJsonCommand}"
+                    VerticalOptions="End"
+                    WidthRequest="50">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialRegular"
+                            Glyph="{StaticResource IconFile_copy}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+
+            </HorizontalStackLayout>
             <Label
                 Grid.Row="2"
                 FontSize="16"

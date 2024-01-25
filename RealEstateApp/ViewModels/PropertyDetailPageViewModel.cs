@@ -1,7 +1,9 @@
 ﻿using RealEstateApp.Models;
 using RealEstateApp.Services;
 using RealEstateApp.Views;
+using System.Text.Json;
 using System.Windows.Input;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RealEstateApp.ViewModels;
 
@@ -195,4 +197,42 @@ public class PropertyDetailPageViewModel : BaseViewModel
                 { 
                     File = new ReadOnlyFile(Path.Combine(FileSystem.AppDataDirectory, Property.ContractFilePath)) 
                 }));
+
+    private Command _shareTextAndLinkCommand;
+    public ICommand ShareTextAndLinkCommand => _shareTextAndLinkCommand ??= new Command(
+        execute: async () =>
+        {
+            await Share.Default.RequestAsync(new ShareTextRequest
+            {
+                Title = "Share Property",
+                Text = $"{Property.Address}, Price: {Property.Price}, beds: {Property.Beds}",
+                Uri = Property.NeighbourhoodUrl,
+                Subject = "A property you may be interested in"
+            });
+        });
+    private Command _shareFileCommand;
+    public ICommand ShareFileCommand => _shareFileCommand ??= new Command(
+        execute: async () =>
+        {
+            await Share.Default.RequestAsync(new ShareFileRequest
+            {
+                Title = "Share text file",
+                File = new ShareFile(Path.Combine(FileSystem.AppDataDirectory, Property.ContractFilePath))
+            });
+        });
+    private Command _shareJsonCommand;
+    public ICommand ShareJsonCommand => _shareJsonCommand ??= new Command(
+        execute: async () =>
+        {
+            //Virker ikk
+            string jsonString = JsonSerializer.Serialize(Property);
+            await Share.Default.RequestAsync(new ShareTextRequest
+            {
+                Title = "sut",
+                Text = $"hey",
+                Uri = "www.google.com",
+                Subject = jsonString
+            });
+        }
+        );
 }
