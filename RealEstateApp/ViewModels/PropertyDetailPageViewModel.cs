@@ -78,9 +78,65 @@ public class PropertyDetailPageViewModel : BaseViewModel
         execute: async () =>
         {
             await Shell.Current.GoToAsync(nameof(ImageListPage), true, new Dictionary<string, object>
-        {
-            {"MyProperty", Property }
+            {
+                {"MyProperty", Property }
+            });
         });
+
+    private Command _phoneCallMsgCommand;
+    public ICommand PhoneCallMsgCommand => _phoneCallMsgCommand ??= new Command(
+        execute: async () =>
+        {
+            string action = await Shell.Current.DisplayActionSheet($"{Property.Vendor.Phone}", "Cancel", null, "Call", "SMS");
+            switch (action)
+            {
+                case "Call":
+                    if (PhoneDialer.Default.IsSupported)
+                        PhoneDialer.Default.Open($"{Property.Vendor.Phone}");
+                    break;
+                case "SMS":
+                    if (Sms.Default.IsComposeSupported)
+                    {
+                        string[] recipients = new[] { $"{Property.Vendor.Phone}" };
+                        string text = $"Hej {Property.Vendor.FullName}, angående {Property.Address}. Tag hensyn til manglende feature.";
+
+                        var message = new SmsMessage(text, recipients);
+
+                        await Sms.Default.ComposeAsync(message);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        });
+    private Command _mailCommand;
+
+    public ICommand MailCommand => _mailCommand ??= new Command(
+        execute: async () =>
+        {
+            if (Email.Default.IsComposeSupported)
+            {
+
+                string subject = $"Hello {Property.Vendor.FullName}";
+                string body = "It was great to see you last weekend.";
+                string[] recipients = new[] { $"{Property.Vendor.Email}" };
+
+                var message = new EmailMessage
+                {
+                    Subject = subject,
+                    Body = body,
+                    BodyFormat = EmailBodyFormat.PlainText,
+                    To = new List<string>(recipients)
+                };
+                var folder = FileSystem.AppDataDirectory;
+                var attachmentFilePath = Path.Combine(folder, "property.txt");
+                File.WriteAllText(attachmentFilePath, $"{Property.Address}");
+
+                message.Attachments.Add(new EmailAttachment(attachmentFilePath));
+
+                await Email.Default.ComposeAsync(message);
+            }
         }
         );
 
