@@ -137,6 +137,42 @@ public class PropertyDetailPageViewModel : BaseViewModel
 
                 await Email.Default.ComposeAsync(message);
             }
+        });
+    private Command _openMapsCommand;
+    public ICommand OpenMapsCommand => _openMapsCommand ??= new Command(
+        execute: async () =>
+        {
+            var location = new Location(Property.Latitude.Value, Property.Longitude.Value);
+            var options = new MapLaunchOptions { Name = Property.Address };
+
+            try
+            {
+                await Map.Default.OpenAsync(location, options);
+            }
+            catch (Exception ex)
+            {
+                // No map application available to open
+            }
+        });
+    private Command _openMapsNavigationCommand;
+    public ICommand OpenMapsNavigationCommand => _openMapsNavigationCommand ??= new Command(
+        execute: async () =>
+        {
+            var location = new Location(Property.Latitude.Value, Property.Longitude.Value);
+            var options = new MapLaunchOptions
+            {
+                Name =  Property.Address,
+                NavigationMode = NavigationMode.Transit
+            };
+
+            try
+            {
+                await Map.Default.OpenAsync(location, options);
+            }
+            catch (Exception ex)
+            {
+                // No map application available to open
+            }
         }
         );
 

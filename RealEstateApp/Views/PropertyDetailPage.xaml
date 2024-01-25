@@ -79,32 +79,57 @@
                 Grid.Row="4"
                 FontSize="14"
                 Text="{Binding Property.LandSize, StringFormat='Land size: {0} &#x33a1;'}" />
-            <Button
-                Grid.Row="5"
-                Command="{Binding StartSpeck}"
-                HorizontalOptions="Start"
-                IsVisible="{Binding IsVisible}"
-                WidthRequest="50">
-                <Button.ImageSource>
-                    <FontImageSource
-                        FontFamily="MaterialRegular"
-                        Glyph="{StaticResource IconPlay_arrow}"
-                        Size="25" />
-                </Button.ImageSource>
-            </Button>
-            <Button
-                Grid.Row="5"
-                Command="{Binding StopSpeck}"
-                HorizontalOptions="Start"
-                IsVisible="{Binding IsVisible, Converter={converter:InverseBoolConverter}}"
-                WidthRequest="50">
-                <Button.ImageSource>
-                    <FontImageSource
-                        FontFamily="MaterialRegular"
-                        Glyph="{StaticResource IconPause}"
-                        Size="25" />
-                </Button.ImageSource>
-            </Button>
+            <HorizontalStackLayout Grid.Row="5" Spacing="10">
+
+                <Button
+                    Command="{Binding StartSpeck}"
+                    HorizontalOptions="Start"
+                    IsVisible="{Binding IsVisible}"
+                    WidthRequest="50">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialRegular"
+                            Glyph="{StaticResource IconPlay_arrow}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+                <Button
+                    Command="{Binding StopSpeck}"
+                    HorizontalOptions="Start"
+                    IsVisible="{Binding IsVisible, Converter={converter:InverseBoolConverter}}"
+                    WidthRequest="50">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialRegular"
+                            Glyph="{StaticResource IconPause}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+
+                <Button
+                    Command="{Binding OpenMapsCommand}"
+                    HorizontalOptions="Start"
+                    WidthRequest="50">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialRegular"
+                            Glyph="{StaticResource IconMap}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+
+                <Button
+                    Command="{Binding OpenMapsNavigationCommand}"
+                    HorizontalOptions="Start"
+                    WidthRequest="50">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialRegular"
+                            Glyph="{StaticResource IconNavigation}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+            </HorizontalStackLayout>
 
             <Label
                 Grid.Row="6"
