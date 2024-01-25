@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="RealEstateApp.Views.HeightCalculatorPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:RealEstateApp.Models"
+    xmlns:vm="clr-namespace:RealEstateApp.ViewModels"
+    Title="HeightCalculatorPage"
+    x:DataType="vm:HeightCalculatorPageViewModel">
+
+    <Grid Padding="10" RowDefinitions="Auto,Auto,Auto,*,Auto">
+        <Label
+            Grid.Row="0"
+            FontSize="Medium"
+            HorizontalOptions="Center"
+            Text="{Binding CurrentAltitude, StringFormat='Altitude: {0:F2} m'}"
+            VerticalOptions="Start" />
+        <Entry Grid.Row="1" Text="{Binding MeasurementLabel}" />
+        <Button
+            Grid.Row="2"
+            Command="{Binding SaveBarometerInfoCommand}"
+            Text="Save" />
+        <CollectionView
+            Grid.Row="3"
+            ItemsSource="{Binding BarometerMeasurementCollection}"
+            SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:BarometerMeasurement">
+                    <Frame Margin="0,5">
+                        <HorizontalStackLayout>
+                            <Label FontSize="Medium" Text="{Binding Label, StringFormat='{0}: '}" />
+                            <Label FontSize="Medium" Text="{Binding Altitude, StringFormat='{0:F2}m'}" />
+                            <Label
+                                FontSize="Medium"
+                                Text="{Binding HeightChange, StringFormat=' ({0:F2}m)'}"
+                                TextColor="Gray" />
+                        </HorizontalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Label
+            Grid.Row="4"
+            FontSize="Medium"
+            HorizontalOptions="Center"
+            Text="{Binding CurrentPressure, StringFormat='Barometer: {0:F2} hPa'}"
+            VerticalOptions="Center" />
+    </Grid>
+</ContentPage>
