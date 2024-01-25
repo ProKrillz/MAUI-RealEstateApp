@@ -129,6 +129,30 @@
                             Size="25" />
                     </Button.ImageSource>
                 </Button>
+
+                <Button
+                    Command="{Binding OpenBrowserCommand}"
+                    HorizontalOptions="Start"
+                    WidthRequest="50">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialRegular"
+                            Glyph="{StaticResource IconLink}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
+
+                <Button
+                    Command="{Binding OpenFileContactCommand}"
+                    HorizontalOptions="Start"
+                    WidthRequest="50">
+                    <Button.ImageSource>
+                        <FontImageSource
+                            FontFamily="MaterialRegular"
+                            Glyph="{StaticResource IconFile_open}"
+                            Size="25" />
+                    </Button.ImageSource>
+                </Button>
             </HorizontalStackLayout>
 
             <Label

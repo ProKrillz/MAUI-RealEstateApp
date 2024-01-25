@@ -173,7 +173,26 @@ public class PropertyDetailPageViewModel : BaseViewModel
             {
                 // No map application available to open
             }
-        }
-        );
-
+        });
+    private Command _openBrowserCommand;
+    public ICommand OpenBrowserCommand => _openBrowserCommand ??= new Command(
+        execute: async () =>
+        {
+            try
+            {
+                Uri uri = new Uri(Property.NeighbourhoodUrl);
+                await Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
+            }
+            catch (Exception ex)
+            {
+                // An unexpected error occurred. No browser may be installed on the device.
+            }
+        });
+    private Command _openFileContactCommand;
+    public ICommand OpenFileContactCommand => _openFileContactCommand ??= new Command(
+        execute: async () =>
+            await Launcher.Default.OpenAsync(new OpenFileRequest() 
+                { 
+                    File = new ReadOnlyFile(Path.Combine(FileSystem.AppDataDirectory, Property.ContractFilePath)) 
+                }));
 }

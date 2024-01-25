@@ -27,6 +27,8 @@ namespace RealEstateApp.Models
         public double? Longitude { get; set; }
         public string NeighbourhoodUrl { get; set; }
         public Vendor Vendor { get; set; }
+        
+        public string ContractFilePath { get; set; }
 
         private string _aspect;
         public string Aspect { get => _aspect; set => SetProperty(ref _aspect, value); }
