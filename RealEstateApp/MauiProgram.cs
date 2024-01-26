@@ -39,6 +39,9 @@ public static class MauiProgram
 
         builder.Services.AddTransient<ImageListPage>();
         builder.Services.AddTransient<ImageListPageModelView>();
+
+        builder.Services.AddTransient<SettingsPage>();
+        builder.Services.AddTransient<SettingsPageViewModel>();
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
